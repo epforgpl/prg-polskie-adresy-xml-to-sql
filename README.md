@@ -1,6 +1,6 @@
-## Polish address points PRG dataset XML to SQL converter.
+## Polish address points PRG dataset XML to SQL importer.
 
-This repository holds a script for converting Polish address points
+This repository holds a script for importing Polish address points
 obtained from PRG (Państwowy Rejestr Granic) from XML format into
 a MySQL table.
 
