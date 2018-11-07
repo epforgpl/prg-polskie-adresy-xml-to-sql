@@ -1,0 +1,7 @@
+{
+    "name": "epforgpl/prg-polskie-adresy-xml-to-sql",
+    "description": "Polish address points PRG dataset XML to SQL converter.",
+    "require": {
+        "proj4php/proj4php": "^2.0"
+    }
+}
