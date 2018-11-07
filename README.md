@@ -10,3 +10,13 @@ As of 11/2018, the input files for this script can be downloaded
 They are the `PRG – punkty adresowe` dataset in *.GML format.
 
 The script creates a table `punkty_adresowe` in the given DB & schema.
+
+### Usage
+
+    $ php importer.php DIR HOST USERNAME PASSWORD SCHEMA
+    
+- DIR - directory holding unpacked XML files from PRG, without trailing slash
+- HOST - MySQL host to connect to (e.g. localhost)
+- USERNAME - MySQL username
+- PASSWORD - MySQL password
+- SCHEMA - MySQL schema to insert data into
