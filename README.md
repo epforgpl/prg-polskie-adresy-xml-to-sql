@@ -8,3 +8,5 @@ As of 11/2018, the input files for this script can be downloaded
 [here](http://www.gugik.gov.pl/pzgik/dane-bez-oplat/dane-z-panstwowego-rejestru-granic-i-powierzchni-jednostek-podzialow-terytorialnych-kraju-prg).
 
 They are the `PRG – punkty adresowe` dataset in *.GML format.
+
+The script creates a table `punkty_adresowe` in the given DB & schema.

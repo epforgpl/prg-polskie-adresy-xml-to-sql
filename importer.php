@@ -10,6 +10,8 @@
  * http://www.gugik.gov.pl/pzgik/dane-bez-oplat/dane-z-panstwowego-rejestru-granic-i-powierzchni-jednostek-podzialow-terytorialnych-kraju-prg.
  *
  * They are the PRG – punkty adresowe dataset in *.GML format.
+ *
+ * The script creates a table 'punkty_adresowe' in the given DB & schema.
  */
 
 include("vendor/autoload.php");
@@ -159,6 +161,31 @@ function create_mysql_connection(array $argv)
 }
 
 /**
+ * Creates the MySQL table to hold the import data.
+ *
+ * @param $conn
+ * @throws Exception
+ */
+function create_table($conn)
+{
+    $sql =
+     'CREATE TABLE `punkty_adresowe` ( '
+     . '`id` int(11) NOT NULL AUTO_INCREMENT, '
+     . '`kod_pocztowy` char(6) COLLATE utf8mb4_unicode_520_ci NOT NULL, '
+     . '`miejscowosc` varchar(255) COLLATE utf8mb4_unicode_520_ci NOT NULL, '
+     . '`ulica` varchar(255) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL, '
+     . '`numer` varchar(31) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL, '
+     . '`lat` decimal(20,10) DEFAULT NULL, '
+     . '`lon` decimal(20,10) DEFAULT NULL, '
+     . 'PRIMARY KEY (`id`) '
+     . ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;';
+
+    if (mysqli_query($conn, $sql) === false) {
+        throw new \Exception('Could not create MySQL table.');
+    }
+}
+
+/**
  * Imports a processed PRG chunk file into MySQL table.
  *
  * @param string $tmp_dir
@@ -172,7 +199,7 @@ function import_file_into_mysql(string $tmp_dir, string $filename, $conn,
                                 Proj4php $proj4, Proj $projPl, Proj $projLatLon) : void
 {
     echo "Importing file into MySQL: [$filename].\n";
-    $base_insert = "INSERT INTO x (kod_pocztowy, miejscowosc, ulica, numer, lat, lon) VALUES ";
+    $base_insert = "INSERT INTO punkty_adresowe (kod_pocztowy, miejscowosc, ulica, numer, lat, lon) VALUES ";
     $xml = simplexml_load_file($tmp_dir . '/' . $filename);
     $i = 0;
     $sql = $base_insert;
@@ -265,6 +292,8 @@ function main(int $argc, array $argv)
     }
 
     $conn = create_mysql_connection($argv);
+    create_table($conn);
+
     $proj4 = new Proj4php();
     $projPl = new Proj('EPSG:2180', $proj4); // Projection which the PRG files use.
     $projLatLon = new Proj('EPSG:4326', $proj4); // Projection using standard latitude & longitude.
